@@ -70,6 +70,13 @@ class EarthquakeWebSocketClient:
     async def async_connect(self):
         """Connect to the WebSocket server."""
         await self._async_connect_websocket()
+        
+    async def async_disconnect(self):
+    """Disconnect from the WebSocket server."""
+    if self.websocket:
+        await self.websocket.close()
+        self.websocket = None
+        _LOGGER.info("Disconnected from seismicportal.eu WebSocket")
 
     async def _async_connect_websocket(self):
         """Establish WebSocket connection."""
