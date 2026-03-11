@@ -93,9 +93,9 @@ class EarthquakeWebSocketClient:
     async def _async_handle_messages(self):
         """Handle incoming WebSocket messages."""
         _LOGGER.info("Received earthquake message")
-        _LOGGER.info("Parsing message: %s", message)
         try:
             async for message in self.websocket:
+                _LOGGER.info("Parsing message: %s", message)
                 data = json.loads(message)
                 if self._filter_earthquake(data):
                     await self._async_dispatch_event(data)
