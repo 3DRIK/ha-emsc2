@@ -82,7 +82,7 @@ class EarthquakeWebSocketClient:
     async def _async_connect_websocket(self):
         """Establish WebSocket connection."""
         try:
-            self.websocket = await websockets.connect(WS_URI, ping_interval=15)
+            self.websocket = await websockets.connect(WS_URI, ping_interval=15, ssl=False)
             _LOGGER.info("Connected to seismicportal.eu WebSocket")
             self._reconnect_attempts = 0
             self.hass.async_create_task(self._async_handle_messages())
