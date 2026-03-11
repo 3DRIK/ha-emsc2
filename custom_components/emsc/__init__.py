@@ -11,6 +11,7 @@ from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE, CONF_RADIUS
 import homeassistant.helpers.config_validation as cv
 import websockets
 import json
+import aiohttp
 
 from .const import (
     DOMAIN,
@@ -62,6 +63,7 @@ class EarthquakeWebSocketClient:
         """Initialize the WebSocket client."""
         self.hass = hass
         self.entry = entry
+        self.session = None
         self.websocket = None
         self._unsub_interval = None
         self._reconnect_attempts = 0
@@ -69,42 +71,49 @@ class EarthquakeWebSocketClient:
 
     async def async_connect(self):
         """Connect to the WebSocket server."""
-        _LOGGER.info("Attempting to connect to %s", WS_URI)
         await self._async_connect_websocket()
-        
+
+    async def _async_connect_websocket(self):
+        """Establish WebSocket connection."""
+        try:
+            _LOGGER.info("Attempting to connect to %s", WS_URI)
+            self.session = aiohttp.ClientSession()
+            async with self.session.ws_connect(WS_URI) as websocket:
+                self.websocket = websocket
+                _LOGGER.info("Connected to seismicportal.eu WebSocket")
+                self._reconnect_attempts = 0
+                await self._async_handle_messages()
+        except Exception as e:
+            _LOGGER.error("Error connecting to WebSocket: %s", e, exc_info=True)
+            await self._async_schedule_reconnect()
+        finally:
+            if self.session:
+                await self.session.close()
+    
+    async def _async_handle_messages(self):
+        """Handle incoming WebSocket messages."""
+        try:
+            async for message in self.websocket:
+                data = json.loads(message.data)
+                if self._filter_earthquake(data):
+                    await self._async_dispatch_event(data)
+        except aiohttp.ClientError as e:
+            _LOGGER.error("WebSocket connection error: %s", e)
+            await self._async_schedule_reconnect()
+        except Exception as e:
+            _LOGGER.error("Unexpected error handling WebSocket message: %s", e, exc_info=True)
+            await self._async_schedule_reconnect()
+
     async def async_disconnect(self):
         """Disconnect from the WebSocket server."""
         if self.websocket:
             await self.websocket.close()
             self.websocket = None
-            _LOGGER.info("Disconnected from seismicportal.eu WebSocket")
+        if self.session:
+            await self.session.close()
+            self.session = None
+        _LOGGER.info("Disconnected from seismicportal.eu WebSocket")
 
-    async def _async_connect_websocket(self):
-        """Establish WebSocket connection."""
-        try:
-            self.websocket = await websockets.connect(WS_URI, ping_interval=15, ssl=False)
-            _LOGGER.info("Connected to seismicportal.eu WebSocket")
-            self._reconnect_attempts = 0
-            self.hass.async_create_task(self._async_handle_messages())
-        except Exception as e:
-            _LOGGER.error("Error connecting to WebSocket: %s", e)
-            await self._async_schedule_reconnect()
-
-    async def _async_handle_messages(self):
-        """Handle incoming WebSocket messages."""
-        _LOGGER.info("Received earthquake message")
-        try:
-            async for message in self.websocket:
-                _LOGGER.info("Parsing message: %s", message)
-                data = json.loads(message)
-                if self._filter_earthquake(data):
-                    await self._async_dispatch_event(data)
-        except websockets.exceptions.ConnectionClosed:
-            _LOGGER.warning("WebSocket connection closed")
-            await self._async_schedule_reconnect()
-        except Exception as e:
-            _LOGGER.error("Error handling WebSocket message: %s", e)
-            await self._async_schedule_reconnect()
 
     def _filter_earthquake(self, data: dict) -> bool:
         """Filter earthquake data based on user config."""
