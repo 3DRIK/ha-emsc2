@@ -53,7 +53,7 @@ class EarthquakeMagnitudeSensor(EarthquakeSensorBase):
         super().__init__(entry)
         self._attr_name = "Earthquake Magnitude"
         self._attr_native_unit_of_measurement = "M"  # Magnitude unit
-        #self._attr_device_class = SensorDeviceClass.MAGNITUDE
+        self._attr_device_class = None
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_unique_id = f"{entry.entry_id}_magnitude"
 
@@ -71,7 +71,7 @@ class EarthquakeLatitudeSensor(EarthquakeSensorBase):
         super().__init__(entry)
         self._attr_name = "Earthquake Latitude"
         self._attr_native_unit_of_measurement = "°"  # Degree symbol for latitude
-        self._attr_device_class = SensorDeviceClass.LATITUDE
+        self._attr_device_class = None
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_unique_id = f"{entry.entry_id}_latitude"
 
@@ -89,7 +89,7 @@ class EarthquakeLongitudeSensor(EarthquakeSensorBase):
         super().__init__(entry)
         self._attr_name = "Earthquake Longitude"
         self._attr_native_unit_of_measurement = "°"  # Degree symbol for longitude
-        self._attr_device_class = SensorDeviceClass.LONGITUDE
+        self._attr_device_class = None
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_unique_id = f"{entry.entry_id}_longitude"
 
