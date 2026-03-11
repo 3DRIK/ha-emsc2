@@ -1,0 +1,12 @@
+{
+  "domain": "zemetrasenia",
+  "name": "Earthquake Monitoring",
+  "documentation": "https://github.com/art-ano/zemetrasenia/blob/main/README.md",
+  "issue_tracker": "https://github.com/art-ano/zemetrasenia/issues",
+  "dependencies": ["websockets>=10.0"],
+  "codeowners": ["3DRIK"],
+  "requirements": ["websockets==10.0"],
+  "iot_class": "local_polling",
+  "version": "1.0.0",
+  "homeassistant": "2024.1.0"
+}
