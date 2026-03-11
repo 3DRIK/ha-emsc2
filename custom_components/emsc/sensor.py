@@ -37,7 +37,7 @@ class EarthquakeSensorBase(SensorEntity):
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
             name="Earthquake Monitor",
-            manufacturer="art ano",
+            manufacturer="EMSC",
         )
 
     @callback
@@ -53,7 +53,7 @@ class EarthquakeMagnitudeSensor(EarthquakeSensorBase):
         super().__init__(entry)
         self._attr_name = "Earthquake Magnitude"
         self._attr_native_unit_of_measurement = "M"  # Magnitude unit
-        self._attr_device_class = SensorDeviceClass.MAGNITUDE
+        #self._attr_device_class = SensorDeviceClass.MAGNITUDE
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_unique_id = f"{entry.entry_id}_magnitude"
 
