@@ -1,8 +1,8 @@
 {
-  "domain": "zemetrasenia",
+  "domain": "emsc",
   "name": "Earthquake Monitoring",
-  "documentation": "https://github.com/art-ano/zemetrasenia/blob/main/README.md",
-  "issue_tracker": "https://github.com/art-ano/zemetrasenia/issues",
+  "documentation": "https://github.com/3DRIK/ha-emsc2",
+  "issue_tracker": "https://github.com/3DRIK/ha-emsc2/issues",
   "dependencies": ["websockets>=10.0"],
   "codeowners": ["3DRIK"],
   "requirements": ["websockets==10.0"],
