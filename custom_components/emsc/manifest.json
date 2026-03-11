@@ -5,7 +5,7 @@
   "issue_tracker": "https://github.com/3DRIK/ha-emsc2/issues",
   "dependencies": [],
   "codeowners": ["3DRIK"],
-  "requirements": ["websockets==10.0"],
+  "requirements": [],
   "iot_class": "local_polling",
   "version": "1.0.0",
   "homeassistant": "2024.1.0",
