@@ -1,5 +1,5 @@
 {
   "name": "Seismic Portal - EMSC",
   "content_in_root": false,
-  "domains": ["seismicportal"]
+  "domains": ["emsc"]
 }
