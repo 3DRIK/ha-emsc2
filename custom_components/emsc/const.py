@@ -1,5 +1,5 @@
 """Constants for the Earthquake Monitoring integration."""
-DOMAIN = "zemetrasenia"
+DOMAIN = "seismicportal"
 
 CONF_MIN_MAGNITUDE = "min_magnitude"
 CONF_RADIUS = "radius"
