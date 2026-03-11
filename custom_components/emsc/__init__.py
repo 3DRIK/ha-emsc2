@@ -69,6 +69,7 @@ class EarthquakeWebSocketClient:
 
     async def async_connect(self):
         """Connect to the WebSocket server."""
+        _LOGGER.info("Attempting to connect to %s", WS_URI)
         await self._async_connect_websocket()
         
     async def async_disconnect(self):
