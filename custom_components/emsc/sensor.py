@@ -4,7 +4,6 @@ from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorStateClass,
 )
-from homeassistant.const import UnitOfMeasurement
 from homeassistant.core import callback
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -29,7 +28,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     ]
     async_add_entities(sensors, True)
 
-class EarthquakeSensorBase(CoordinatorEntity, SensorEntity):
+class EarthquakeSensorBase(SensorEntity):
     """Base class for Earthquake Monitoring sensors."""
 
     def __init__(self, entry):
@@ -53,7 +52,7 @@ class EarthquakeMagnitudeSensor(EarthquakeSensorBase):
         """Initialize the magnitude sensor."""
         super().__init__(entry)
         self._attr_name = "Earthquake Magnitude"
-        self._attr_native_unit_of_measurement = "M"
+        self._attr_native_unit_of_measurement = "M"  # Magnitude unit
         self._attr_device_class = SensorDeviceClass.MAGNITUDE
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_unique_id = f"{entry.entry_id}_magnitude"
@@ -71,7 +70,7 @@ class EarthquakeLatitudeSensor(EarthquakeSensorBase):
         """Initialize the latitude sensor."""
         super().__init__(entry)
         self._attr_name = "Earthquake Latitude"
-        self._attr_native_unit_of_measurement = UnitOfMeasurement.DEGREE
+        self._attr_native_unit_of_measurement = "°"  # Degree symbol for latitude
         self._attr_device_class = SensorDeviceClass.LATITUDE
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_unique_id = f"{entry.entry_id}_latitude"
@@ -89,7 +88,7 @@ class EarthquakeLongitudeSensor(EarthquakeSensorBase):
         """Initialize the longitude sensor."""
         super().__init__(entry)
         self._attr_name = "Earthquake Longitude"
-        self._attr_native_unit_of_measurement = UnitOfMeasurement.DEGREE
+        self._attr_native_unit_of_measurement = "°"  # Degree symbol for longitude
         self._attr_device_class = SensorDeviceClass.LONGITUDE
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_unique_id = f"{entry.entry_id}_longitude"
